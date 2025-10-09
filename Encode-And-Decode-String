@@ -1,0 +1,48 @@
+// 🔹 Encode & Decode Strings (LeetCode 271)
+// Implements a custom serialization format for a vector of strings.
+// Each word is encoded as "<length>#<word>", ensuring lossless recovery
+// even if the original strings contain special characters or delimiters.
+// 
+// Pattern used: Length-Prefix Encoding (common in data serialization / networking)
+// - Encoding:  write [length] + '#' + [string] for each word
+// - Decoding:  use two-pointer parsing to read length, skip '#', then extract substring
+// 
+// This approach avoids ambiguity (e.g., commas, spaces) and mimics how low-level
+// protocols frame messages — a great example of bridging algorithms with real systems.
+
+
+class Solution {
+public:
+    string encoded = "";
+    string encode(vector<string>& strs) {
+        for (const auto& s : strs) {
+            encoded += to_string(s.size());
+            encoded.push_back('#');    // delimiter
+            encoded += s;
+        }
+        return encoded;
+    }
+    
+    vector<string> decoded;
+    string decodeParse = "";
+    vector<string> decode(string s) {
+        int left = 0; 
+        int right = 0;
+        while(left < s.length())
+        {
+            int wordLength = 0;
+            right++;
+            string parse = s.substr(left , right);
+            if(parse.find("#"))
+            {
+                wordLength = stoi(s.substr(left, right - left));
+                decodeParse = s.substr(right + 1, wordLength);
+                decoded.push_back(decodeParse);
+                left = right + 1 + wordLength;
+                right = left; 
+            }
+        }
+
+        return decoded;
+    }
+};
