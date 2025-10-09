@@ -13,36 +13,31 @@
 
 class Solution {
 public:
-    string encoded = "";
     string encode(vector<string>& strs) {
+        string encoded;                      
         for (const auto& s : strs) {
             encoded += to_string(s.size());
-            encoded.push_back('#');    // delimiter
+            encoded.push_back('#');
             encoded += s;
         }
         return encoded;
     }
-    
-    vector<string> decoded;
-    string decodeParse = "";
-    vector<string> decode(string s) {
-        int left = 0; 
-        int right = 0;
-        while(left < s.length())
-        {
-            int wordLength = 0;
-            right++;
-            string parse = s.substr(left , right);
-            if(parse.find("#"))
-            {
-                wordLength = stoi(s.substr(left, right - left));
-                decodeParse = s.substr(right + 1, wordLength);
-                decoded.push_back(decodeParse);
-                left = right + 1 + wordLength;
-                right = left; 
-            }
-        }
 
+    vector<string> decode(string s) {
+        vector<string> decoded;                 
+        int left = 0, right = 0;
+
+        while (left < (int)s.size()) {
+            right = left;
+            while (right < (int)s.size() && s[right] != '#') right++;
+
+            int wordLength = stoi(s.substr(left, right - left));
+
+            int start = right + 1;
+            decoded.push_back(s.substr(start, wordLength));
+
+            left = start + wordLength;
+        }
         return decoded;
     }
 };
