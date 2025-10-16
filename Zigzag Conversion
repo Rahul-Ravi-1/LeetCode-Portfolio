@@ -1,0 +1,42 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        // If there's only one row (or less), the string stays the same.
+        if (numRows <= 1) {
+            return s;
+        }
+
+        // Create a list of strings, each representing one row in the zigzag pattern.
+        std::vector<std::string> list(numRows, "");
+
+        // Track the current row index and whether we’re moving down or up.
+        int currentLine = 0;
+        bool reachedEdge = true; // True means we’re moving upward; false means downward.
+
+        // Traverse each character in the string.
+        for (int i = 0; i < s.length(); ++i) {
+            // Flip direction when we hit the top (0) or bottom (numRows - 1).
+            if (currentLine == 0 || currentLine == numRows - 1) {
+                reachedEdge = !reachedEdge;
+            }
+
+            // Append the current character to the corresponding row.
+            list.at(currentLine) += s.at(i);
+
+            // Move in the current direction (down or up).
+            if (!reachedEdge) {
+                currentLine++;
+            } else {
+                currentLine--;
+            }
+        }
+
+        // Combine all rows into a single resulting string.
+        std::string result;
+        for (int i = 0; i < numRows; ++i) {
+            result += list.at(i);
+        }
+
+        return result;
+    }
+};
