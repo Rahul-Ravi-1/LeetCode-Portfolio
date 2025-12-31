@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int water = 0;
+
+        // Two pointers starting from both ends
+        int left = 0;
+        int right = height.size() - 1;
+
+        // Track the highest wall seen so far from each side
+        int leftMax = 0;
+        int rightMax = 0;
+
+        // Move inward until pointers meet
+        while (left < right) {
+
+            // The smaller side determines the water level
+            if (height[left] < height[right]) {
+
+                // Update left max or trap water at left
+                if (height[left] > leftMax) {
+                    leftMax = height[left];
+                } else {
+                    water += leftMax - height[left];
+                }
+                left++; // move left pointer inward
+
+            } else {
+
+                // Update right max or trap water at right
+                if (height[right] > rightMax) {
+                    rightMax = height[right];
+                } else {
+                    water += rightMax - height[right];
+                }
+                right--; // move right pointer inward
+            }
+        }
+
+        return water;
+    }
+};
