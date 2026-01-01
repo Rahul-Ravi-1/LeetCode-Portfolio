@@ -1,0 +1,82 @@
+/*
+We treat the 2D matrix as a sorted structure in two levels:
+1) Rows are sorted top to bottom.
+2) Each row is sorted left to right.
+
+Instead of flattening the matrix, we do TWO binary searches:
+- First binary search finds the row where the target could exist.
+- Second binary search searches within that row.
+
+This keeps the solution O(log m + log n) and very readable.
+*/
+
+
+
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+
+        // Number of rows and columns
+        int m = matrix.size();
+        int n = matrix[0].size();
+
+        // Binary search boundaries for rows
+        int top = 0;
+        int bottom = m - 1;
+
+        // This will store the candidate row
+        int row = -1;
+
+        // First binary search: find the correct row
+        while(top <= bottom)
+        {
+            int mid = (top + bottom) / 2;
+
+            // Target is smaller than the first element of this row
+            if(target < matrix[mid][0])
+            {
+                bottom = mid - 1;
+            }
+            // Target is larger than the last element of this row
+            else if(target > matrix[mid][n - 1])
+            {
+                top = mid + 1;
+            }
+            // Target must be inside this row
+            else
+            {
+                row = mid;
+                break;
+            }
+        }
+
+        // If no valid row was found, target doesn't exist
+        if(row == -1) return false;
+
+        // Binary search boundaries within the row
+        int left = 0;
+        int right = n - 1;
+
+        // Second binary search: search inside the row
+        while(left <= right)
+        {
+            int mid = (left + right) / 2;
+
+            if(matrix[row][mid] == target)
+            {
+                return true;
+            }
+            else if(matrix[row][mid] < target)
+            {
+                left = mid + 1;
+            }
+            else
+            {
+                right = mid - 1;
+            }
+        }
+
+        // Target not found
+        return false;
+    }
+};
