@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int first = 0;
+        int last = nums.size() - 1;
+        
+        // Binary search to find the minimum element in a rotated sorted array
+        while(first < last) {
+            int mid = first + (last - first) / 2;
+            
+            // If mid element is greater than next element, we found the rotation point
+            // The next element is the minimum
+            if(nums[mid] > nums[mid + 1]) {
+                return nums[mid + 1];
+            }
+            
+            // If mid element is greater than last element, minimum is in right half
+            // This means we're in the higher sorted portion before rotation
+            if(nums[mid] > nums[last]) {
+                first = mid + 1;
+            } 
+            // Otherwise, minimum is in left half (including mid)
+            // This means we're in the lower sorted portion after rotation
+            else {
+                last = mid;
+            }
+        }
+        
+        // When first == last, we've found the minimum element
+        return nums[first];
+    }
+};
