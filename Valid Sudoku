@@ -1,0 +1,52 @@
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+
+        // seen tables:
+        // rowCount[r][d]    -> have we seen digit d in row r?
+        // columnCount[c][d] -> have we seen digit d in column c?
+        // boxCount[b][d]    -> have we seen digit d in 3x3 box b?
+        // (digits are 1..9, index 0 is unused)
+        bool rowCount[9][10] = {false};
+        bool columnCount[9][10] = {false};
+        bool boxCount[9][10] = {false};
+
+        // 1) Check each row for duplicates
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                if (board[r][c] == '.') continue;           // ignore empty cells
+                int num = board[r][c] - '0';                // '1'..'9' -> 1..9
+                if (rowCount[r][num]) return false;         // duplicate in this row
+                rowCount[r][num] = true;                    // mark digit as seen
+            }
+        }
+
+        // 2) Check each column for duplicates
+        for (int c = 0; c < 9; c++) {
+            for (int r = 0; r < 9; r++) {
+                if (board[r][c] == '.') continue;           // ignore empty cells
+                int num = board[r][c] - '0';                // '1'..'9' -> 1..9
+                if (columnCount[c][num]) return false;      // duplicate in this column
+                columnCount[c][num] = true;                 // mark digit as seen
+            }
+        }
+
+        // 3) Check each 3x3 sub-box for duplicates
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                if (board[r][c] == '.') continue;           // ignore empty cells
+
+                // Map (r, c) to a box index 0..8:
+                // r/3 gives box row (0..2), c/3 gives box col (0..2)
+                // box = (boxRow * 3) + boxCol
+                int box = (r / 3) * 3 + (c / 3);
+
+                int num = board[r][c] - '0';                // '1'..'9' -> 1..9
+                if (boxCount[box][num]) return false;       // duplicate in this box
+                boxCount[box][num] = true;                  // mark digit as seen
+            }
+        }
+
+        return true; // no duplicates found in any row/column/box
+    }
+};
