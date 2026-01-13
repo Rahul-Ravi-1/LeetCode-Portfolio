@@ -1,0 +1,39 @@
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+
+        // Left pointer starts at beginning
+        int left = 0;
+
+        // Right pointer starts at end
+        int right = numbers.size() - 1;
+
+        // Move pointers inward until they meet
+        while (left < right)
+        {
+            // Current sum of the two pointed values
+            int sum = numbers[left] + numbers[right];
+
+            // If we found the target sum, return 1-based indices
+            if (sum == target)
+            {
+                return {left + 1, right + 1};
+            }
+
+            // If sum is too large, decrease it by moving right pointer left
+            else if (sum > target)
+            {
+                right--;
+            }
+
+            // If sum is too small, increase it by moving left pointer right
+            else
+            {
+                left++;
+            }
+        }
+
+        // No valid pair found
+        return {};
+    }
+};
