@@ -1,0 +1,50 @@
+class TimeMap {
+public:
+    unordered_map<string, vector<pair<int, string>>> map;
+    TimeMap() {}
+
+    void set(string key, string value, int timestamp) {
+        map[key].push_back({timestamp, value});
+    }
+
+    string get(string key, int timestamp) {
+        if (map.find(key) == map.end()) {
+            return "";
+        }
+        // Get the vector of pairs for this key
+        vector<pair<int, string>>& pairs = map[key];
+
+        // Binary search
+        int left = 0;
+        int right = pairs.size() - 1;
+        int result = -1; // Store index of best answer
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (pairs[mid].first <= timestamp) {
+                // This timestamp works! Save it and search right for larger
+                result = mid;
+                left = mid + 1;
+            } else {
+                // This timestamp is too large, search left
+                right = mid - 1;
+            }
+        }
+
+        // If result is -1, no valid timestamp found
+        if (result == -1) {
+            return "";
+        }
+
+        // Return the value at the found index
+        return pairs[result].second;
+    }
+};
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap* obj = new TimeMap();
+ * obj->set(key,value,timestamp);
+ * string param_2 = obj->get(key,timestamp);
+ */
