@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int start = 0;              // Candidate starting station
+        int current_tank = 0;       // Current gas tank balance
+        int totalGas = 0, totalCost = 0;  // Track totals to check if solution exists
+        
+        // Single pass through all stations
+        for(int i = 0; i < gas.size(); i++)
+        {
+            totalGas += gas[i];
+            totalCost += cost[i];
+            current_tank += gas[i] - cost[i];  // Net gain/loss at this station
+            
+            // If tank goes negative, stations 0 to i can't be valid starts
+            if(current_tank < 0)
+            {
+                current_tank = 0;   // Reset tank
+                start = i + 1;       // Try next station as potential start
+            }
+        }
+        
+        // If total gas >= total cost, a solution exists and 'start' is the answer
+        // Otherwise, no valid starting point exists
+        if(totalGas >= totalCost)
+        {
+            return start;
+        }
+        return -1;
+    }
+};
+
+- Greedy single-pass O(n) solution
+- Key insight: if total_gas >= total_cost, solution exists
+- Reset starting position when tank goes negative
+- Time: O(n), Space: O(1)
