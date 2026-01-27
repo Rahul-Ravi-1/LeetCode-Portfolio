@@ -1,0 +1,49 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+/** Implemented recursive solution using post-order traversal:
+- Base cases: return null if node is null, return node if it's p or q
+- Recursively search left and right subtrees
+- If both subtrees return non-null, current node is LCA
+- If only one subtree returns non-null, pass it up (LCA is deeper)
+- Time: O(n), Space: O(h) where h is tree height
+
+Key insight: A node can be a descendant of itself, so finding p/q 
+immediately returns that node. The solution naturally handles cases 
+where one node is ancestor of the other.*/
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        TreeNode* currentNode = root;
+        if(currentNode == nullptr)
+        {
+            return nullptr;
+        }
+        
+        if(currentNode == p || currentNode == q)
+        {
+            return currentNode;
+        }
+        TreeNode* left = lowestCommonAncestor(currentNode->left, p , q);
+        TreeNode* right = lowestCommonAncestor(currentNode->right, p , q);
+        if(left != nullptr && right != nullptr)
+        {
+            return currentNode;
+        }
+        if(left != nullptr && right == nullptr)
+        {
+            return left;
+        }
+        if(right != nullptr && left == nullptr)
+        {
+            return right;
+        }
+        return nullptr;
+    }
+};
