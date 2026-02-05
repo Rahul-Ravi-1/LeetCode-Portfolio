@@ -1,0 +1,24 @@
+# Uses stack data structure to solve problem. Goes through the list in O(n) time and O(n) space complexity 
+# Check if the character is an opening character and appends it or if its not checks if it's closing and then pops.
+#Common edge cases would be if the stack was empty then it would return an Index Error
+class Solution:
+    def isValid(self, s: str) -> bool:
+        stack = []
+        
+        for c in s:
+            if c == '(' or c == '{' or c == '[':
+                stack.append(c)
+            elif c == ')':
+                if not stack or stack[-1] != '(':
+                    return False
+                stack.pop()
+            elif c == '}':
+                if not stack or stack[-1] != '{':
+                    return False
+                stack.pop()
+            elif c == ']':
+                if not stack or stack[-1] != '[':
+                    return False
+                stack.pop()
+        
+        return len(stack) == 0
