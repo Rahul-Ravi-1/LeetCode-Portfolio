@@ -1,0 +1,29 @@
+#Bucket sort algo
+#Makes an empty array of arrays. Then we count how many times each number 
+#appears using a hash map. We place each number into a bucket at the index 
+#corresponding to its frequency. Then we iterate from the largest frequency 
+#to the smallest, collecting numbers until we have k elements!
+
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        count = {}
+        freq = []
+        for i in range(len(nums) + 1):
+            freq.append([])
+
+        for n in nums:
+            count[n] = count.get(n,0) + 1
+        for n , c in count.items():
+            freq[c].append(n)
+
+        result = []
+        for i in range(len(freq) - 1, 0, -1):
+            for n in freq[i]:
+                result.append(n)
+                if len(result) == k:
+                    return result
+
+        return result
+
+        
+        
