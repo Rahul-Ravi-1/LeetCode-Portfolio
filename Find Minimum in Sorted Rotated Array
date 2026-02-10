@@ -1,0 +1,19 @@
+#Binary search algorithm
+#Intuitive because we can just keep reducing the array in half until pointers left == right and then can just return it
+#Array has been rotated so we can deduce that if right is smaller we can search right half if its not it's going to be left side of array
+#Philosophy of not needing the entire answer only what we need
+
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        left = 0
+        right = len(nums) - 1
+        while left < right: 
+            mid = left + (right - left) // 2
+            if nums[mid] > nums[right]:
+                left = mid + 1
+            else:
+                right = mid
+        
+        return nums[left]
+
+        
