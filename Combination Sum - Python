@@ -1,0 +1,20 @@
+class Solution:
+    def combinationSum(self, nums: List[int], target: int) -> List[List[int]]:
+
+        results = []
+        def backtrack( numbers , start ,  target, currentSum, currentCombination, results):
+            if currentSum == target:
+                results.append(currentCombination[:])
+                return
+            if currentSum > target:
+                return
+            for i in range(start, len(numbers)):
+                currentSum += numbers[i]
+                currentCombination.append(numbers[i])
+                backtrack(numbers , i , target, currentSum, currentCombination, results)
+                currentCombination.remove(numbers[i])
+                currentSum -= numbers[i]
+        backtrack(nums, 0, target, 0, [], results)
+        return results
+            
+        
