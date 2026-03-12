@@ -1,0 +1,18 @@
+#Simple backtracking algo, the caveat here is that you need to append a copy of the list we are adding since techinically if you don't you are techincially appending a pointer/address not the actual list!
+
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        result = []
+
+        def backtrack(current : List[int]) -> List[int]:
+            if len(current) == len(nums):
+                result.append(current[:])
+                return
+            for i in range(len(nums)):
+                if nums[i] not in current:
+                    current.append(nums[i])
+                    backtrack(current)
+                    current.pop()
+        
+        backtrack([])
+        return result
