@@ -1,0 +1,22 @@
+# This problem is BFS. Basically you are building the list using a queue and then popping when needed.
+# The trick here tho is that when you pop a node if you check if the node you popped is null or not. If it isn't it adds to the queue
+# Which means the while loop keeps running until it can't!
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+        ans = []
+        q = deque([root])
+
+        while q:
+            lenLevel = len(q)
+            level = []
+            for i in range(lenLevel):
+                node = q.popleft()
+                if node:
+                    level.append(node.val)
+                    q.append(node.left)
+                    q.append(node.right)
+            if level:
+                ans.append(level)
+        return ans
