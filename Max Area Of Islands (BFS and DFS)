@@ -1,0 +1,50 @@
+#So this is the bfs solution
+#The biggest pattern to recognize is the deque and visited set. As we search each section we want to check we add it into the visited. At the same time we are also popping from the queue
+#This ensures that we go through everything and the while condition resolves itself
+#There's some other cool tricks we can do with BFS that's the same thing such as "Sinking the Island" approach which is just turning the 1's into 0 ( Not for this problem but for Number Of Islands but interesting to think about
+
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        if not grid:
+            return 0
+        visit = set()
+        rows , cols = len(grid), len(grid[0])
+        islands = 0
+        def bfs( r , c) :
+            q = deque()
+            visit.add((r , c))
+            q.append((r, c))
+            directions = [[1,0] , [-1,0] , [0, 1] , [0 , -1]]
+            while q:
+                row , col = q.popleft()
+                for dr, dc in directions:
+                    if (row + dr) in range(rows) and (col + dc) in range(cols) and grid[row + dr][col + dc] == "1" and (row + dr, col + dc) not in visit:
+                        visit.add( (row + dr, col + dc) )
+                        q.append( (row + dr, col + dc) )
+
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == "1" and (r, c) not in visit:
+                    bfs(r , c)
+                    islands += 1 # We know that if see our first 1 our bfs call will take care of all the 1s in that island so we can count that as the first touch of the island
+        return islands
+
+# This is the DFS solution, more natural and defintely less code
+# Idea is the same go through each square but we recurse into the next one so we may keep stacking dfs calls on top of each other for it to return. This appraoch works as well because we are still keeping track of what we visit
+# After that we go through the all the squares and just check if its a 1 or we didnt visit it yet
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        visited = set()
+        ROWS, COLS = len(grid) , len(grid[0])
+
+        def dfs(r , c):
+            if r < 0 or r == ROWS or c < 0 or c == COLS or grid[r][c] == 0 or (r , c) in visited:
+                return 0
+            visited.add( (r,c) )
+            return (1 + dfs(r+1,c) + dfs(r-1,c) + dfs(r , c + 1) + dfs(r , c - 1))
+        ans = 0
+        for r in range(ROWS):
+            for c in range(COLS):
+                if grid[r][c] == 1 and (r,c) not in visited:
+                    ans = max(ans , dfs(r,c))
+        return ans
